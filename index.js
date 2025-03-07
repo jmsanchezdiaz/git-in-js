@@ -28,7 +28,17 @@ class Git {
   }
   
   log(){
-   
+    const history = []
+    
+    let start = this.HEAD
+    
+    do {
+      history.push(`id: ${start.id} - ${start.message}`)
+      start = start.prevCommit
+    }
+    while(start)
+    
+    return history
   }
 }
 
@@ -38,4 +48,4 @@ repo.commit("hotfix") // git commit -m "hotfix"
 repo.commit("correcting") // git commit -m "hotfix"
 repo.commit("moneyyyy") // git commit -m "hotfix"
 
-repo.log()
+console.log(repo.log())
