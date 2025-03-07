@@ -7,6 +7,10 @@ function generateUUID() {
   });
 }
 
+function niceLog(log) {
+  return log.map(commit => commit.id).join(" <- ")
+}
+
 class Branch {
   constructor(name, commit) {
     this.name = name;
@@ -30,23 +34,22 @@ class Git {
   constructor(name) {
     this.name = name;
     this.HEAD = new Branch("master", null);
-    this.branches = [this.HEAD]; // Could be a dictionary to be more performant
+    this.branches = { "master": this.HEAD}; // Could be a dictionary to be more performant
   }
   
 
   checkout(branchName) {
     // Looking for the branch.
-    for(let branch of this.branches) {
-      if(branch.name === branchName) {
-        console.log("SWITCHING to " + branchName + " from " + this.HEAD.name)
-        this.HEAD = branch
-        return branch
-      }
+    const branchFound = this.branches[branchName]
+    if(!!branchFound) {
+      console.log("SWITCHING to " + branchName + " from " + this.HEAD.name)
+      this.HEAD = branchFound
+      return this.HEAD;
     }
     
     // Creating if not found
     const newBranch = new Branch(branchName, this.HEAD.commit);
-    this.branches.push(newBranch);
+    this.branches[newBranch] = newBranch;
     console.log("SWITCHING to " + branchName + " from " + this.HEAD.name)
     this.HEAD = newBranch;
     return newBranch;
@@ -78,10 +81,10 @@ repo.commit("hotfix") // git commit -m "hotfix"
 repo.commit("correcting") // git commit -m "hotfix"
 repo.commit("moneyyyy") // git commit -m "hotfix"
 
-// console.log(repo.log())
+console.log("master: ", niceLog(repo.log()))
 
-// repo.checkout("testing")
+repo.checkout("testing")
 
-// repo.commit("Mondongo")
+repo.commit("Mondongo")
 
-// console.log(repo.log())
+console.log("testing: ", niceLog(repo.log()))
