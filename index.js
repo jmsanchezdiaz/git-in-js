@@ -32,11 +32,10 @@ class Git {
     
     let start = this.HEAD
     
-    do {
+    while(start){
       history.push(`id: ${start.id} - ${start.message}`)
       start = start.prevCommit
     }
-    while(start)
     
     return history
   }
