@@ -13,6 +13,10 @@ class Commit {
     this.message = message;
     this.prevCommit = prevCommit;
   }
+  
+  toString() {
+    return `Commit ${this.id} - ${this.message}`
+  }
 }
 
 class Git {
@@ -33,7 +37,7 @@ class Git {
     let start = this.HEAD
     
     while(start){
-      history.push(`id: ${start.id} - ${start.message}`)
+      history.push(start)
       start = start.prevCommit
     }
     
